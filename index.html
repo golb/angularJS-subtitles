@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html ng-app="subtitlesEditor">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subtitles</title>
+  <link rel="stylesheet" href="css/style.css" />
+
+  <script>document.write('<base href="' + document.location + '" />');</script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script>
+  <script> var app = angular.module('subtitlesEditor', []); </script>
+  <script src="upload.js"></script>
+  <script src="app.js"></script>
+
+</head>
+
+<body>
+  <div ng-controller="UploadController">
+      <form>
+          <input type="file" ng-file-select="onFileSelect($files)" >    
+     </form>
+
+     <progress value="{{progress}}"></progress>
+
+     <div class="error" ng-show="isError">ОШИБКА: {{errMessage}}</div>
+
+     <div ng-show="textSrc">
+       <button class="saveFile" ng-click="saveFile()">Скачать файл</button>
+     </div>
+     
+     <table ng-show="textSrc">
+        <tr>
+          <th>Номер реплики</th>
+          <th>Время начала</th>
+          <th>Время конца</th>
+          <th>Реплика</th>
+          <th>Удалить</th>
+          <th>Редактировать</th>
+        </tr>
+        <tr ng-class="{edited: value.edited}" ng-repeat="(key, value) in textSrc">
+          <td>{{key + 1}}</td>
+          <td>{{value.start}}</td>
+          <td>{{value.end}}</td>
+          <td>{{value.text}}</td>
+          <td>
+            <span ng-hide="textSrc.length == 1" ng-click="removeSubtitle(key)">X</span>
+          </td>
+          <td ng-click="editSubtitle(key)">==</td>
+        </tr>
+      </table>
+      
+      <div class="wrapper" ng-show="isShowEditSubtitle">
+        <div class="subtitle">
+          <input type="text" name="userName" ng-model="newSubtitle">
+          <button ng-click="closeEditSubtitle()">Применить</button>
+        </div>
+      </div>
+  </div>
+</body>
+</html>
